@@ -10,7 +10,5 @@ def main() :
     vuePrincipale = VuePrincipale()
     vuePrincipale.mainloop()
 
-
-
 if __name__ == '__main__' :
     main()
