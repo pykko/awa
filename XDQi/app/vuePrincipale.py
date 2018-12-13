@@ -33,6 +33,7 @@ class VuePrincipale ( Tk ) :
         resultat = VueConnexion(self)
         resultat.transient(self)
         resultat.grab_set()
+        resultat.focus_force()
         self.wait_window(resultat)
 
 
