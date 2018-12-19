@@ -12,6 +12,7 @@ class VueConnexion ( Toplevel ) :
     def __init__( self , parent ) :
         super().__init__( parent )
         self.title( 'Connexion' )
+        self.vuePrincipale = parent
 
         lab_pseudo = Label( self , text='Pseudo :' , width = 20 , anchor = 'e' )
         self.ent_pseudo = Entry( self , width = 20 )
@@ -44,10 +45,17 @@ class VueConnexion ( Toplevel ) :
 
             if reponse.status == 200 :
                 showinfo( 'Connexion' , 'Authentification réussie !' )
+                self.vuePrincipale.menuFichier.entryconfig( 0 , state = 'disabled' )
+                self.vuePrincipale.menuFichier.entryconfig( 1, state = 'normal' )
+                self.vuePrincipale.barreMenus.entryconfig( 2 , state = 'normal' )
+                self.destroy()
+
             else :
                 showerror( 'Connexion' , 'Authentification refusée !' )
         except :
             showerror( 'Connexion' , 'Petit problème réseau non ?' )
+
+
 
 
     def annuler( self ) :

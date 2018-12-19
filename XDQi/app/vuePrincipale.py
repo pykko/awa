@@ -6,7 +6,7 @@ from tkinter.messagebox import *
 from vueConnexion import VueConnexion
 
 class VuePrincipale ( Tk ) :
-
+		
     def __init__( self ) :
         super().__init__()
         self.title('XouDouQi')
@@ -15,21 +15,21 @@ class VuePrincipale ( Tk ) :
         self.creerBarreMenus()
 
     def creerBarreMenus( self ) :
-        barreMenus = Menu( self )
-        self.config(menu=barreMenus)
+        self.barreMenus = Menu( self )
+        self.config(menu=self.barreMenus)
 
-        menuFichier = Menu(barreMenus, tearoff=0)
-        barreMenus.add_cascade(label='Fichier', menu=menuFichier)
+        self.menuFichier = Menu(self.barreMenus, tearoff=0)
+        self.barreMenus.add_cascade(label='Fichier', menu=self.menuFichier)
 
-        menuFichier.add_command(label='Se connecter', command=self.seConnecter)
-        menuFichier.add_command(label='Se déconnecter')
-        menuFichier.add_separator()
-        menuFichier.add_command(label='Quitter', command=self.quitterApplication)
+        self.menuFichier.add_command(label='Se connecter', command=self.seConnecter)
+        self.menuFichier.add_command(label='Se déconnecter' , command=self.sedDeconnecter , state = 'disabled' )
+        self.menuFichier.add_separator()
+        self.menuFichier.add_command(label='Quitter', command=self.quitterApplication)
 
-        menuParties = Menu(barreMenus, tearoff=0)
-        barreMenus.add_cascade( label="Parties" , menu=menuParties )
+        self.menuParties = Menu(self.barreMenus, tearoff=0)
+        self.barreMenus.add_cascade( label="Parties" , menu=self.menuParties , state = 'disabled' )
 
-        menuParties.add_command( label = 'Initier'  , command = self.initierPartie )
+        self.menuParties.add_command( label = 'Initier'  , command = self.initierPartie )
 
 
     def seConnecter( self ) :
@@ -38,6 +38,16 @@ class VuePrincipale ( Tk ) :
         resultat.grab_set()
         resultat.focus_force()
         self.wait_window(resultat)
+
+
+    def sedDeconnecter( self ) :
+        reponse = askyesno('Déconnexion', 'Confirmez-vous la déconnexion ?' )
+        print(reponse)
+        if reponse == True :
+            self.menuFichier.entryconfig(0, state='normal')
+            self.menuFichier.entryconfig(1, state='disabled')
+            self.barreMenus.entryconfig(2, state='disabled')
+
 
     def quitterApplication(self):
         reponse = askquestion('Quitter', 'Voulez-vous vraiment quitter ?', icon='question')
