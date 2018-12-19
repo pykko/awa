@@ -30,6 +30,7 @@ def getConnexion() :
 def seConnecter( pseudo , mdp ) :
     try :
         curseur = getConnexion().cursor()
+
         requete = '''
             select id , email
             from Joueur
@@ -37,7 +38,7 @@ def seConnecter( pseudo , mdp ) :
             and mdp = %s
         '''
 
-        r = curseur.execute( requete , ( pseudo , mdp ) )
+        curseur.execute( requete , ( pseudo , mdp ) )
 
         enregistrement = curseur.fetchone()
 
@@ -54,3 +55,38 @@ def seConnecter( pseudo , mdp ) :
     except mysql.connector.Error as e :
         print( e )
         return None
+
+
+def initierPartie( idJoueur , couleur ) :
+    try :
+        curseur = getConnexion().cursor()
+
+        requetePartie = '''
+                insert into Partie( creation , initiateur , son_tour )
+                values( now() , %s , %s )
+            '''
+
+        if couleur == 'B' :
+            curseur.execute( requetePartie , ( idJoueur , idJoueur ) )
+        else :
+            curseur.execute( requetePartie , ( idJoueur, None ) )
+
+        idPartie = curseur.lastrowid
+
+        requeteChoisir = '''
+                insert into Choisir
+                values( %s , %s , %s )
+            '''
+        curseur.execute( requeteChoisir , ( idPartie , idJoueur , couleur ) )
+
+        connexion.commit()
+
+        curseur.close()
+
+        return idPartie
+
+
+    except mysql.connector.Error as e :
+        print( e )
+        return None
+

@@ -34,6 +34,21 @@ def seConnecter( pseudo , mdp ) :
     return reponse
 
 
+@app.route( '/parties/<idJoueur>/<couleur>' , methods = [ 'POST' ] )
+def initierPartie( idJoueur , couleur ) :
+    idNouvellePartie = modeleXDQ.initierPartie( idJoueur , couleur )
+    reponse = make_response( '' )
+
+    if idNouvellePartie != None :
+        reponse.headers[ 'Location' ] = '/parties/%d'.format( idNouvellePartie )
+        reponse.status_code = 201
+
+    else :
+        reponse.status_code = 409
+
+    return reponse
+
+
 
 if __name__ == '__main__' :
     app.run( debug = True , host = '0.0.0.0' , port = 5000 )
